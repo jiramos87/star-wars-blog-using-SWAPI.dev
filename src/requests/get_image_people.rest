@@ -1,0 +1,1 @@
+GET https://starwars-aws.s3.amazonaws.com/img/planets
