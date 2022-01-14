@@ -1,7 +1,13 @@
+import loginUserAPI from '../services/loginUserAPI'
+import registerUserAPI from '../services/registerUserAPI'
+
 const getState = ({ getStore, getActions, setStore }) => {
     const baseUrl = 'https://swapi.dev/api'
     return {
         store: {
+            currentUser: null,
+            errorMessage: null,
+            invalidCredentials: false,
             people: [],
             vehicles: [],
             planets: [],
@@ -19,8 +25,45 @@ const getState = ({ getStore, getActions, setStore }) => {
             totalPlanetsPages: 1,
             favorites: [],
             details: []
+
         },
         actions: {
+            loginUser: async (loginFormData, history) => {
+                const log = await loginUserAPI(loginFormData).then((data) => {
+                    console.log('data en login flux', data)
+                    if(data.status == 200) {
+                        setStore({...getStore, currentUser: data.user[0]})
+                        setStore({...getStore, token: data.token})
+                        localStorage.setItem("jwt-token", data.token);
+                        history.push("/private")
+                    } else {
+                        setStore({...getStore, invalidCredentials: true})
+                        setStore({...getStore, errorMesage: data.message})
+                        history.push("/register")
+                        
+                    }
+                })
+            },
+
+            registerUser: async (registerFormData, history) => {
+                const us = await registerUserAPI(registerFormData).then((data) => {
+                    console.log(data)
+                      
+                    if(data.status == 200) {
+                        setStore({...getStore, currentUser: 1})
+                        setStore({...getStore, token: data.token})
+                        localStorage.setItem("jwt-token", data.token);
+                    } else {
+                        setStore({...getStore, errorMesage: data.message}) 
+                        history.push("/register")
+                    }
+                })
+            },
+            logout: () => {
+                setStore({...getStore, currentUser: null})
+                setStore({...getStore, token: null})
+            }, 
+
             getPersons: () => {
                 fetch(`${baseUrl}/people`)
                 .then(data => data.json())

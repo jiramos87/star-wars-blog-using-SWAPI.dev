@@ -17,6 +17,9 @@ import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import injectContext from './store/AppContext';
 import ScrollToTop from './components/scrollToTop';
+import Login from './components/Login'
+import Signup from './components/Signup'
+import Private from './components/Private'
 import Favorites from './views/Favorites';
 
 const App = () => {
@@ -37,6 +40,9 @@ const App = () => {
               <Route exact path="/">
                 <Home />
               </Route>
+              <Route exact path="/home">
+                <Home />
+              </Route>
               <Route exact path="/people">
                 <People />
               </Route>
@@ -51,6 +57,15 @@ const App = () => {
               </Route>
               <Route exact path="/favorites">
                 <Favorites />
+              </Route>
+              <Route exact path="/login">
+                <Login />
+              </Route>
+              <Route exact path="/signup">
+                <Signup />
+              </Route>
+              <Route exact path="/private">
+                <Private />
               </Route>
 
             </Switch>
